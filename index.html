@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Invoice Generator</h1>
+            <p>Create professional invoices and download as PDF</p>
+        </header>
+        
+        <div class="app-container">
+            <div class="card">
+                <h2 class="card-title">Invoice Details</h2>
+                
+                <div class="form-group">
+                    <label for="logo">Company Logo</label>
+                    <input type="file" id="logo" class="form-control" accept="image/*">
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label for="invoiceNumber">Invoice Number</label>
+                        <input type="text" id="invoiceNumber" class="form-control" value="INV-001">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label for="dueDate">Due Date</label>
+                        <input type="date" id="dueDate" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="currency">Currency</label>
+                        <select id="currency" class="form-control">
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="INR">INR (₹)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <h3 class="card-title" style="font-size: 1.3rem; margin-top: 30px;">From (Your Company)</h3>
+                
+                <div class="form-group">
+                    <label for="fromName">Company Name</label>
+                    <input type="text" id="fromName" class="form-control" value="Your Company Name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="fromAddress">Address</label>
+                    <input type="text" id="fromAddress" class="form-control" value="123 Business Street">
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label for="fromCity">City</label>
+                        <input type="text" id="fromCity" class="form-control" value="New York">
+                    </div>
+                    <div class="form-group">
+                        <label for="fromZip">ZIP Code</label>
+                        <input type="text" id="fromZip" class="form-control" value="10001">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label for="fromEmail">Email</label>
+                        <input type="email" id="fromEmail" class="form-control" value="info@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="fromPhone">Phone</label>
+                        <input type="tel" id="fromPhone" class="form-control" value="(555) 123-4567">
+                    </div>
+                </div>
+                
+                <h3 class="card-title" style="font-size: 1.3rem; margin-top: 30px;">Bill To (Client)</h3>
+                
+                <div class="form-group">
+                    <label for="toName">Client Name</label>
+                    <input type="text" id="toName" class="form-control" value="Client Name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="toAddress">Address</label>
+                    <input type="text" id="toAddress" class="form-control" value="456 Client Avenue">
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label for="toCity">City</label>
+                        <input type="text" id="toCity" class="form-control" value="Los Angeles">
+                    </div>
+                    <div class="form-group">
+                        <label for="toZip">ZIP Code</label>
+                        <input type="text" id="toZip" class="form-control" value="90210">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label for="toEmail">Email</label>
+                        <input type="email" id="toEmail" class="form-control" value="client@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="toPhone">Phone</label>
+                        <input type="tel" id="toPhone" class="form-control" value="(555) 987-6543">
+                    </div>
+                </div>
+                
+                <div class="items-section">
+                    <h3 class="card-title" style="font-size: 1.3rem; margin-top: 30px;">Items</h3>
+                    
+                    <div id="itemsContainer">
+                        <div class="item-row">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input type="text" class="form-control item-description" value="Web Design Service">
+                            </div>
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input type="number" class="form-control item-quantity" value="1" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label>Price</label>
+                                <input type="number" class="form-control item-price" value="500" min="0" step="0.01">
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: end;">
+                                <button class="btn btn-danger remove-item">✕</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="addItem" class="btn btn-success">+ Add Item</button>
+                </div>
+                
+                <div class="form-group" style="margin-top: 30px;">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" class="form-control" rows="3" placeholder="Additional notes...">Thank you for your business!</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="terms">Terms & Conditions</label>
+                    <textarea id="terms" class="form-control" rows="3" placeholder="Payment terms...">Payment due within 30 days</textarea>
+                </div>
+            </div>
+            
+            <div class="card invoice-preview">
+                <h2 class="card-title">Invoice Preview</h2>
+                
+                <div id="logoPreview" class="logo-preview">
+                    <div class="empty-logo">Logo will appear here</div>
+                </div>
+                
+                <div class="invoice-header">
+                    <div>
+                        <div class="invoice-title">INVOICE</div>
+                        <div id="previewInvoiceNumber">#INV-001</div>
+                    </div>
+                    <div class="invoice-details">
+                        <div>Date: <span id="previewDate">2023-01-01</span></div>
+                        <div>Due Date: <span id="previewDueDate">2023-01-31</span></div>
+                    </div>
+                </div>
+                
+                <div class="invoice-from-to">
+                    <div>
+                        <div class="section-title">From:</div>
+                        <div id="previewFromName">Your Company Name</div>
+                        <div id="previewFromAddress">123 Business Street</div>
+                        <div id="previewFromCity">New York, 10001</div>
+                        <div id="previewFromEmail">info@company.com</div>
+                        <div id="previewFromPhone">(555) 123-4567</div>
+                    </div>
+                    <div>
+                        <div class="section-title">Bill To:</div>
+                        <div id="previewToName">Client Name</div>
+                        <div id="previewToAddress">456 Client Avenue</div>
+                        <div id="previewToCity">Los Angeles, 90210</div>
+                        <div id="previewToEmail">client@example.com</div>
+                        <div id="previewToPhone">(555) 987-6543</div>
+                    </div>
+                </div>
+                
+                <table class="invoice-items">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewItems">
+                        <tr>
+                            <td>Web Design Service</td>
+                            <td>1</td>
+                            <td>$500.00</td>
+                            <td>$500.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="invoice-totals">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span id="previewSubtotal">$500.00</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Tax (10%):</span>
+                        <span id="previewTax">$50.00</span>
+                    </div>
+                    <div class="total-row final">
+                        <span>Total:</span>
+                        <span id="previewTotal">$550.00</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <div class="section-title">Notes:</div>
+                    <div id="previewNotes">Thank you for your business!</div>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <div class="section-title">Terms & Conditions:</div>
+                    <div id="previewTerms">Payment due within 30 days</div>
+                </div>
+                
+                <div class="preview-actions">
+                    <button id="downloadPdf" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Download PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="script.js"></script>
+</body>
+</html>
